@@ -1,0 +1,5 @@
+SortIncludes: false
+BasedOnStyle: Google
+PointerAlignment: Right
+ReferenceAlignment: Right
+ColumnLimit: 80
