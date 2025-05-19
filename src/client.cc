@@ -1,6 +1,4 @@
 #include "client.h"
-#include <iostream>
-#include "arpa/inet.h"
 
 namespace cppServer {
 
