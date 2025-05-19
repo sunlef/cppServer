@@ -25,16 +25,24 @@ void client::main() {
     std::cin.getline(buffer, sizeof(buffer));
 
     ssize_t write_bytes = write(sockfd, buffer, sizeof(buffer));
-    if (write_bytes > 0) {
+    if (write_bytes == -1) {
+      close(sockfd);
+      throw clientWriteException();
+    }
+
+    std::fill(buffer, buffer + sizeof(buffer), 0);
+    ssize_t read_bytes = read(sockfd, buffer, sizeof(buffer));
+
+    if (read_bytes > 0) {
       printReceiveMessage(sockfd, buffer);
-    } else if (write_bytes == 0) {
+    } else if (read_bytes == 0) {
       printDisconnectLog(sockfd, inet_ntoa(addr.sin_addr),
                          ntohs(addr.sin_port));
       close(sockfd);
       break;
     } else {
       close(sockfd);
-      throw clientWriteException();
+      throw clientReadException();
     }
   }
 }

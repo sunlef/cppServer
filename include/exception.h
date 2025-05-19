@@ -64,7 +64,14 @@ class serverWriteException : public std::runtime_error {
  */
 class clientWriteException : public std::runtime_error {
  public:
-  explicit clientWriteException() : std::runtime_error("write failed") {}
+  explicit clientWriteException() : std::runtime_error("client write failed") {}
+};
+/**
+ * @brief 客户端读取异常
+ */
+class clientReadException : public std::runtime_error {
+ public:
+  explicit clientReadException() : std::runtime_error("client read failed") {}
 };
 
 }  // namespace cppServer
