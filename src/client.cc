@@ -3,6 +3,7 @@
 #include <iostream>
 #include "exception.h"
 #include "printLog.h"
+#include "constant.h"
 
 namespace cppServer {
 
@@ -19,7 +20,7 @@ void client::main() {
   }
 
   while (true) {
-    char buffer[1024]{};
+    char buffer[BUFFER_SIZE]{};
 
     std::cout << "Please enter a message: ";
     std::cin.getline(buffer, sizeof(buffer));
@@ -36,8 +37,7 @@ void client::main() {
     if (read_bytes > 0) {
       printReceiveMessage(sockfd, buffer);
     } else if (read_bytes == 0) {
-      printDisconnectLog(sockfd, inet_ntoa(addr.sin_addr),
-                         ntohs(addr.sin_port));
+      printDisconnectLog(sockfd);
       close(sockfd);
       break;
     } else {

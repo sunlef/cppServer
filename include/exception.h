@@ -12,6 +12,30 @@ class baseSocketCreateException : public std::runtime_error {
 };
 
 /**
+ * @brief epoll创建异常
+ */
+class epollCreateException : public std::runtime_error {
+ public:
+  explicit epollCreateException() : std::runtime_error("epoll create failed") {}
+};
+
+/**
+ * @brief epoll添加异常
+ */
+class epollAddException : public std::runtime_error {
+ public:
+  explicit epollAddException() : std::runtime_error("epoll add failed") {}
+};
+
+/**
+ * @brief epoll等待异常
+ */
+class epollWaitException : public std::runtime_error {
+ public:
+  explicit epollWaitException() : std::runtime_error("epoll wait failed") {}
+};
+
+/**
  * @brief 绑定异常
  */
 class bindException : public std::runtime_error {
