@@ -1,6 +1,5 @@
 #include "server.h"
 #include "sys/socket.h"
-#include <iostream>
 #include <exception.h>
 #include <unistd.h>
 #include "printLog.h"
@@ -37,6 +36,30 @@ void server::main() {
 
   printConnectLog(client_fd, inet_ntoa(client_addr.sin_addr),
                   ntohs(client_addr.sin_port));
+
+  // 接收数据
+  while (true) {
+    char buffer[1024]{};
+
+    ssize_t bytes_received = read(client_fd, buffer, sizeof(buffer));
+
+    if (bytes_received > 0) {
+      printReceiveMessage(client_fd, buffer);
+      err = write(client_fd, buffer, bytes_received);
+      if (err == -1) {
+        close(client_fd);
+        throw serverWriteException();
+      }
+    } else if (bytes_received == 0) {
+      printDisconnectLog(client_fd, inet_ntoa(client_addr.sin_addr),
+                         ntohs(client_addr.sin_port));
+      close(client_fd);
+      break;
+    } else {
+      close(client_fd);
+      throw serverReadException();
+    }
+  }
 
   close(client_fd);
 }
