@@ -12,7 +12,7 @@ add_executable(runServer ${CMAKE_SOURCE_DIR}/test/runServer.cc ${SOURCES} ${CMAK
 add_executable(runClient ${CMAKE_SOURCE_DIR}/test/runClient.cc ${SOURCES} ${CMAKE_SOURCE_DIR})
 
 function(setup_target target_name)
-  target_include_directories(${target_name} PUBLIC ${CMAKE_SOURCE_DIR}/include)
+  target_include_directories(${target_name} PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/util)
 endfunction()
 
 setup_target(test)

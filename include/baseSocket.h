@@ -16,7 +16,7 @@ class baseSocket {
    * @brief 构造函数，初始化socket和地址信息。
    * @param family 协议族（如AF_INET）
    * @param type 套接字类型（如SOCK_STREAM）
-   * @param protocol 协议（如0）
+   * @param protocol 协议（0代表自动选择）
    * @param ip 绑定或连接的IP地址
    * @param port 绑定或连接的端口号
    */

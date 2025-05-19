@@ -1,6 +1,5 @@
 #pragma once
 
-#include "arpa/inet.h"
 #include "baseSocket.h"
 
 namespace cppServer {
@@ -16,18 +15,17 @@ class client : public baseSocket {
    * @brief 构造函数，初始化客户端socket。
    * @param family 协议族
    * @param type 套接字类型
-   * @param protocol 协议
+   * @param protocol 协议（0代表自动选择）
    * @param ip 服务器IP地址
    * @param port 服务器端口号
    */
-  client(in_port_t family, __socket_type type, int protocol, char const *ip,
+  client(sa_family_t family, __socket_type type, int protocol, char const *ip,
          uint16_t port);
 
   /**
    * @brief 客户端主流程，连接到服务器。
-   * //TODO @return  
    */
-  int main();
+  void main();
 
  private:
 };

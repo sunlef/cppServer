@@ -1,13 +1,21 @@
 #include <unistd.h>
 #include "baseSocket.h"
+#include "exception.h"
 
 namespace cppServer {
 
 // baseSocket类的实现
 
-baseSocket::baseSocket(in_port_t family, __socket_type type, int protocol,
+baseSocket::baseSocket(sa_family_t family, __socket_type type, int protocol,
                        char const *ip, uint16_t port)
-    : sockfd{socket(family, type, protocol)}, addr{} {
+    : sockfd{}, addr{} {
+
+  // 创建socket
+  sockfd = socket(family, type, protocol);
+  if (sockfd < 0) {
+    throw baseSocketCreateException();
+  }
+
   // 初始化地址结构体
   addr.sin_family = family;
   addr.sin_addr.s_addr = inet_addr(ip);
