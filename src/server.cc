@@ -104,6 +104,7 @@ void server::main() {
             }
           } else if (bytes_received == 0) {  // 连接关闭
             printDisconnectLog(event[i].data.fd);
+            epoll_ctl(epoll_fd, EPOLL_CTL_DEL, event[i].data.fd, nullptr); // 删除epoll事件
             close(event[i].data.fd);
           } else if (bytes_received == -1 &&
                      errno == EINTR) {  // 客户端正常中断，继续读取
