@@ -3,14 +3,23 @@
 
 namespace cppServer {
 /**
- * @brief 基础socket创建异常
+ * @brief socket创建异常
  */
-class baseSocketCreateException : public std::runtime_error {
+class socketCreateException : public std::runtime_error {
  public:
-  explicit baseSocketCreateException()
+  explicit socketCreateException()
       : std::runtime_error("Socket creation failed") {}
 };
 
+/**
+ * @brief socket设置非阻塞异常
+ */
+class socketSetNonBlockingException : public std::runtime_error {
+ public:
+  explicit socketSetNonBlockingException()
+      : std::runtime_error("Socket set non-blocking failed") {}
+};
+  
 /**
  * @brief epoll创建异常
  */
@@ -36,27 +45,29 @@ class epollWaitException : public std::runtime_error {
 };
 
 /**
- * @brief 绑定异常
+ * @brief socket绑定异常
  */
-class bindException : public std::runtime_error {
+class socketBindException : public std::runtime_error {
  public:
-  explicit bindException() : std::runtime_error("bind failed") {}
+  explicit socketBindException() : std::runtime_error("socket bind failed") {}
 };
 
 /**
- * @brief 监听异常
+ * @brief socket监听异常
  */
-class listenException : public std::runtime_error {
+class socketListenException : public std::runtime_error {
  public:
-  explicit listenException() : std::runtime_error("listen failed") {}
+  explicit socketListenException()
+      : std::runtime_error("socket listen failed") {}
 };
 
 /**
- * @brief 接受异常
+ * @brief socket接受异常
  */
-class acceptException : public std::runtime_error {
+class socketAcceptException : public std::runtime_error {
  public:
-  explicit acceptException() : std::runtime_error("accept failed") {}
+  explicit socketAcceptException()
+      : std::runtime_error("socket accept failed") {}
 };
 
 /**

@@ -7,9 +7,9 @@ project(cppServer VERSION 0.0.1 LANGUAGES C CXX)
 
 file(GLOB SOURCES "src/*.cc" "src/*.cpp")
 
-add_executable(test ${CMAKE_SOURCE_DIR}/test/main.cc ${SOURCES} ${CMAKE_SOURCE_DIR})
-add_executable(runServer ${CMAKE_SOURCE_DIR}/test/runServer.cc ${SOURCES} ${CMAKE_SOURCE_DIR})
-add_executable(runClient ${CMAKE_SOURCE_DIR}/test/runClient.cc ${SOURCES} ${CMAKE_SOURCE_DIR})
+add_executable(test ${CMAKE_SOURCE_DIR}/test/main.cc ${SOURCES})
+add_executable(runServer ${CMAKE_SOURCE_DIR}/test/runServer.cc ${SOURCES})
+add_executable(runClient ${CMAKE_SOURCE_DIR}/test/runClient.cc ${SOURCES})
 
 function(setup_target target_name)
   target_include_directories(${target_name} PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/util)
