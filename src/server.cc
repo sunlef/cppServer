@@ -15,12 +15,9 @@ server::server(sa_family_t family, __socket_type type, int protocol,
       serv_addr{new InternetAddress(family, ip, port)},
       ep{new epoll()} {
   try {
-    serv_socket->bind(serv_addr);  // 绑定socket到指定地址和端口
-
-    serv_socket->listen();  // 监听socket，等待客户端连接
-
+    serv_socket->bind(serv_addr);   // 绑定socket到指定地址和端口
+    serv_socket->listen();          // 监听socket，等待客户端连接
     serv_socket->setNonBlocking();  // 设置socket为非阻塞模式
-
     ep->add_fd(serv_socket->getFd(),
                EPOLLIN | EPOLLET);  // 添加socket到epoll实例中
   } catch (...) {
@@ -62,8 +59,7 @@ void server::main() {
           //  client_socket = nullptr;
           // 为什么不能删除呢？
 
-        } else if (event.events & EPOLLERR) {  // 监听到错误事件
-        } else if (event.events & EPOLLIN) {   // 监听到可读事件
+        } else if (event.events & EPOLLIN) {  // 监听到可读事件
           handle_event(event.data.fd);
         } else {  // 其他事件
           // TODO:

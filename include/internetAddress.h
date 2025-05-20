@@ -20,9 +20,8 @@ class InternetAddress {
    * @brief 默认构造函数
    */
   InternetAddress();
-
-  sockaddr_in addr;  ///< IPv4地址结构体
-
+  
+  sockaddr_in addr;    ///< IPv4地址结构体
   socklen_t addr_len;  ///< 地址长度
 };
 }  // namespace cppServer

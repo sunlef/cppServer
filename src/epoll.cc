@@ -12,7 +12,7 @@ epoll::epoll() : epoll_fd{-1}, events{} {
     throw epollCreateException();
   }
 
-  events = new epoll_event[MAX_EVENT]{};
+  events = new epoll_event[MAX_EVENTS]{};
 }
 
 epoll::~epoll() {
@@ -38,7 +38,7 @@ void epoll::add_fd(int fd, uint32_t op) {
 std::vector<epoll_event> epoll::epoll_poll(int timeout) {
   std::vector<epoll_event> activeEvents;
 
-  int cnt_fd = epoll_wait(epoll_fd, events, MAX_EVENT, timeout);
+  int cnt_fd = epoll_wait(epoll_fd, events, MAX_EVENTS, timeout);
 
   if (cnt_fd == -1) {
     throw epollWaitException();

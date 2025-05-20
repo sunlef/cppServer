@@ -32,12 +32,10 @@ class server {
   void main();
 
  private:
-  socket *serv_socket;  ///<服务器监听socket
+  socket *serv_socket;         ///< 服务器监听socket
+  InternetAddress *serv_addr;  ///< 服务器地址
+  epoll *ep;                   ///< epoll实例
 
-  InternetAddress *serv_addr;  ///<服务器地址
-
-  epoll *ep;  ///<epoll实例
-
-  void handle_event(int sockfd);  ///<处理事件的函数
+  void handle_event(int sockfd);  ///< 处理事件的函数
 };
 }  // namespace cppServer

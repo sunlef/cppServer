@@ -31,8 +31,7 @@ class client {
   void main();
 
  private:
-  socket *client_socket;  /// <客户端socket
-
+  socket *client_socket;       /// <客户端socket
   InternetAddress *serv_addr;  /// <服务器地址
 };
 }  // namespace cppServer
