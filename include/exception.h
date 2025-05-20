@@ -19,7 +19,7 @@ class socketSetNonBlockingException : public std::runtime_error {
   explicit socketSetNonBlockingException()
       : std::runtime_error("Socket set non-blocking failed") {}
 };
-  
+
 /**
  * @brief epoll创建异常
  */
@@ -34,6 +34,14 @@ class epollCreateException : public std::runtime_error {
 class epollAddException : public std::runtime_error {
  public:
   explicit epollAddException() : std::runtime_error("epoll add failed") {}
+};
+
+/**
+ * @brief epoll修改异常
+ */
+class epollModException : public std::runtime_error {
+ public:
+  explicit epollModException() : std::runtime_error("epoll mod failed") {}
 };
 
 /**

@@ -35,19 +35,35 @@ void epoll::add_fd(int fd, uint32_t op) {
   }
 }
 
-std::vector<epoll_event> epoll::epoll_poll(int timeout) {
-  std::vector<epoll_event> activeEvents;
+void epoll::updateChannel(channel *ch) {
+  int fd = ch->getFd();
 
-  int cnt_fd = epoll_wait(epoll_fd, events, MAX_EVENTS, timeout);
+  epoll_event ev{};
+  ev.data.ptr = ch;
+  ev.events = ch->getEvents();
 
-  if (cnt_fd == -1) {
-    throw epollWaitException();
+  if (!ch->isInEpoll()) {
+    int err = epoll_ctl(epoll_fd, EPOLL_CTL_ADD, fd, &ev);
+    if (err == -1) {
+      throw epollAddException();
+    }
+    ch->setInEpoll();
+  } else {
+    int err = epoll_ctl(epoll_fd, EPOLL_CTL_MOD, fd, &ev);
+    if (err == -1) {
+      throw epollModException();
+    }
   }
+}
 
-  for (size_t i = 0; i < cnt_fd; i++) {
-    activeEvents.push_back(events[i]);
+std::vector<channel *> epoll::poll(int timeout) {
+  std::vector<channel *> activeChannels;
+  int cnt_events = epoll_wait(epoll_fd, events, MAX_EVENTS, timeout);
+  for (size_t i = 0; i < cnt_events; ++i) {
+    channel *ch = static_cast<channel *>(events[i].data.ptr);
+    ch->setRevents(events[i].events);
+    activeChannels.push_back(ch);
   }
-
-  return activeEvents;
+  return activeChannels;
 }
 }  // namespace cppServer

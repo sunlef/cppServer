@@ -6,6 +6,7 @@
 #include "printLog.h"
 #include "sys/epoll.h"
 #include "constant.h"
+#include "channel.h"
 
 namespace cppServer {
 
@@ -18,8 +19,6 @@ server::server(sa_family_t family, __socket_type type, int protocol,
     serv_socket->bind(serv_addr);   // 绑定socket到指定地址和端口
     serv_socket->listen();          // 监听socket，等待客户端连接
     serv_socket->setNonBlocking();  // 设置socket为非阻塞模式
-    ep->add_fd(serv_socket->getFd(),
-               EPOLLIN | EPOLLET);  // 添加socket到epoll实例中
   } catch (...) {
     throw;
   }
@@ -36,11 +35,15 @@ server::~server() {
 
 void server::main() {
   try {
-    while (true) {  // 主循环，等待并接受客户端连接
-      std::vector<epoll_event> events = ep->epoll_poll();
+    channel *ch = new channel(ep, serv_socket->getFd());
+    ch->enableReading();
 
-      for (auto const &event : events) {
-        if (event.data.fd == serv_socket->getFd()) {  // 监听到新连接
+    while (true) {  // 主循环，等待并接受客户端连接
+      std::vector<channel *> activeChannel = ep->poll();
+
+      for (auto const &event : activeChannel) {
+        const int &channel_fd = event->getFd();
+        if (channel_fd == serv_socket->getFd()) {  // 监听到新连接
           InternetAddress *client_addr = new InternetAddress();
           socket *client_socket = new socket(serv_socket->accept(client_addr));
 
@@ -50,8 +53,8 @@ void server::main() {
 
           client_socket->setNonBlocking();
 
-          ep->add_fd(client_socket->getFd(),
-                     EPOLLIN | EPOLLET);  // 添加新连接到epoll实例中
+          channel *client_channel = new channel(ep, client_socket->getFd());
+          client_channel->enableReading();
 
           //  delete client_addr;
           //  client_addr = nullptr;
@@ -59,8 +62,8 @@ void server::main() {
           //  client_socket = nullptr;
           // 为什么不能删除呢？
 
-        } else if (event.events & EPOLLIN) {  // 监听到可读事件
-          handle_event(event.data.fd);
+        } else if (event->getRevents() & EPOLLIN) {  // 监听到可读事件
+          handle_event(channel_fd);
         } else {  // 其他事件
           // TODO:
         }
